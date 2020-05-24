@@ -1,7 +1,7 @@
 import traceback
 import logging
 from sqlalchemy.orm.exc import NoResultFound
-from app.api import api
+from app.controllers.api import api
 
 log = logging.getLogger(__name__)
 
