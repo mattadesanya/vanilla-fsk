@@ -5,4 +5,4 @@ The line:
 import app.controllers.api.v1 in app/__init__.py uses this file
 """
 
-from app.controllers.api.v1 import users
+from app.controllers.api.v1 import users_controller
