@@ -1,3 +1,4 @@
+# pylint: disable=too-few-public-methods
 """App Configuration
 
 Config is the base class which other classes inherit
@@ -13,6 +14,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
+    """Base Config Class"""
     APP_DIR = "app"
     SECRET_KEY = os.getenv('SECRET_KEY') or \
         "".join(random.choice(string.ascii_uppercase + string.digits)
@@ -20,6 +22,7 @@ class Config:
 
 
 class TestConfig(Config):
+    """Test Configuration"""
     DEBUG = True
     TESTING = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -28,6 +31,7 @@ class TestConfig(Config):
 
 
 class DevelopmentConfig(Config):
+    """Development Configuration"""
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DB_URL') \
         or "postgres://postgres@localhost:5432/fsk_dev_db"
@@ -35,6 +39,7 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
+    """Production Configuration"""
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DB_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False

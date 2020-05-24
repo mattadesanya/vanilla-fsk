@@ -1,3 +1,5 @@
+"""The application launch script"""
+
 from flask_script import Manager
 from app import app
 
