@@ -7,7 +7,7 @@ from flask import Flask
 from app.database import db
 from app.controllers.api import api_v1 as api_v1_blueprint
 from config import config
-from app.controllers.api.v1 import *
+import app.controllers.api.v1
 
 
 def create_app(config_name):
