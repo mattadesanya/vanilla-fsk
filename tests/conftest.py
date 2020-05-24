@@ -21,3 +21,10 @@ def app():
         app_context.pop()
 
     return test_app
+
+
+# pylint: disable=redefined-outer-name
+@pytest.fixture(scope="function")
+def client(app):
+    """Create client fixture at the function level"""
+    return app.test_client()

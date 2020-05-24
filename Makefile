@@ -19,10 +19,10 @@ test_v:
 	python -m pytest --verbose
 
 testcov:
-	python -m pytest --verbose -p no:sugar --cov=vanilla-fsk tests/
+	python -m pytest --verbose -p no:sugar --cov=app tests/
 
 testcovreport:
-	python -m pytest --verbose -p no:sugar --cov-report html:cov_html --cov=vanilla-fsk tests/
+	python -m pytest --verbose -p no:sugar --cov-report html:cov_html --cov=app tests/
 
 # run all tests without the sugar plugin
 nosugar:
@@ -45,4 +45,4 @@ functest:
 # Run tests by Marker expression
 # the example here are tests labelled with `marked`. Replace `marked` with desired label
 markedtest:
-	python -m pytest --verbose -m marked
+	python -m pytest -p no:sugar --verbose -m marked
