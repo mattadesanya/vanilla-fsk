@@ -1,2 +1,2 @@
 lint:
-	pylint ./**/*.py
+	pylint ./*.py **/*.py
