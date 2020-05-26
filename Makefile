@@ -1,8 +1,38 @@
+#initialize the fsk app
+init:
+	pip install -r requirements.txt
+
 run:
 	python3 manage.py runserver
 
 lint:
 	pylint ./*.py app tests
+
+# database migration commands
+clean:
+	rm -rf migrations
+
+reset_tables:
+	python manage.py reset_tables
+
+init_db:
+	python manage.py db init
+
+migrate:
+	python manage.py db migrate
+
+upgrade:
+	python manage.py db upgrade
+
+downgrade:
+	python manage.py db downgrade
+
+seed: reset_tables
+	python manage.py seed
+
+migrate_upgrade: migrate upgrade
+
+db_setup: clean init_db migrate upgrade
 
 # run all tests
 # by default uses sugar
