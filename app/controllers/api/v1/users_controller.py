@@ -1,7 +1,8 @@
 """Users Controller"""
 
+from flask import jsonify
 from app.controllers.api import api_v1 as api
-from app.models.user import User
+from app.daos.user_dao import UserDAO as user_dao
 
 
 @api.route('/users')
@@ -10,4 +11,7 @@ def index():
 
     This controller returns all users
     """
-    return 'Welcome to my API'
+    users = user_dao.get_all()
+    print(users)
+    # return jsonify(users)
+    return "works!"

@@ -16,7 +16,6 @@ class User(Model):
     password = db.Column(db.String(200), nullable=False)
     last_login = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
 
-    def __init__(self, id=None, username=None, password=None):
-        self.id = id
+    def __init__(self, username=None, password=None):
         self.username = username
         self.password = password
