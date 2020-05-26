@@ -4,6 +4,7 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from app import flask_app
 from app.database import db
+from db.seeds.user import seed_user
 
 
 migrate = Migrate(flask_app, db)
@@ -18,6 +19,14 @@ def reset_tables():
     """
     db.drop_all()
     db.create_all()
+
+
+@manager.command
+def seed():
+    """
+    Generate seed/fake data for application database
+    """
+    seed_user()
 
 
 if __name__ == '__main__':

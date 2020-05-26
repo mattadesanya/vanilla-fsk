@@ -13,29 +13,29 @@ pylint:
 
 # database migration commands
 clean:
-	rm -rf migrations
+	rm -rf db/migrations
 
 reset_tables:
 	python manage.py reset_tables
 
 init_db:
-	python manage.py db init
+	python manage.py db init --directory db/migrations
 
 migrate:
-	python manage.py db migrate
+	python manage.py db migrate -d db/migrations
 
 upgrade:
-	python manage.py db upgrade
+	python manage.py db upgrade -d db/migrations
 
 downgrade:
-	python manage.py db downgrade
+	python manage.py db downgrade -d db/migrations
 
 seed: reset_tables
 	python manage.py seed
 
 migrate_upgrade: migrate upgrade
 
-db_setup: clean init_db migrate upgrade
+db_setup: clean init_db migrate upgrade seed
 
 # run all tests
 # by default uses sugar
