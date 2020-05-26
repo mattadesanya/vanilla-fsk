@@ -2,7 +2,8 @@
 
 from flask import jsonify
 from app.controllers.api import api_v1 as api
-from app.daos.user_dao import UserDAO as user_dao
+from app.models.user import User
+from app.util.db import DbUtil as db
 
 
 @api.route('/users')
@@ -11,7 +12,7 @@ def index():
 
     This controller returns all users
     """
-    users = user_dao.get_all()
+    users = db.get_all(User)
     print(users)
     # return jsonify(users)
     return "works!"
