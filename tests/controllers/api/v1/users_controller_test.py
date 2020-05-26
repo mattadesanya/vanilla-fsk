@@ -1,8 +1,5 @@
 """User Controller Test"""
 
-import pytest
-import json
-
 
 # @pytest.mark.marked
 def test_user_index(client):

@@ -1,3 +1,6 @@
+# pylint: disable=no-member
+# pylint: disable=too-few-public-methods
+
 """User Model"""
 
 from app.models.model import Model

@@ -9,6 +9,6 @@ If PY_ENV is not set, then default is used.
 """
 
 import os
-import app.controllers.api.v1
+import app.controllers.api.v1  # noqa: F401
 from app.app import create_app
-app = create_app(os.environ.get('PY_ENV') or 'default')
+flask_app = create_app(os.environ.get('PY_ENV') or 'default')

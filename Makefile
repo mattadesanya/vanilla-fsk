@@ -6,6 +6,9 @@ run:
 	python3 manage.py runserver
 
 lint:
+	flake8 ./*.py app tests
+
+pylint:
 	pylint ./*.py app tests
 
 # database migration commands

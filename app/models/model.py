@@ -1,3 +1,6 @@
+# pylint: disable=no-member
+# pylint: disable=too-few-public-methods
+
 """Base Model
 
 Other database models will inherit the properties of the base model
@@ -5,6 +8,7 @@ Other database models will inherit the properties of the base model
 from app.database import db
 
 
+# pylint: disable=invalid-name
 class Model(db.Model):
     """The Base model class"""
     __abstract__ = True
