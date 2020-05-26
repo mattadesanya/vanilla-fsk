@@ -7,7 +7,7 @@ from app.database import db
 class User(Model):
     """User model class"""
 
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)

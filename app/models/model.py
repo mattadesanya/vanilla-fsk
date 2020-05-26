@@ -9,7 +9,7 @@ class Model(db.Model):
     """The Base model class"""
     __abstract__ = True
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     f_id = db.Column(db.String(50), primary_key=True)
     created_by = db.Column(db.String(50))
     updated_by = db.Column(db.String(50))
