@@ -1,6 +1,7 @@
 """Users Controller"""
 
 from app.controllers.api import api_v1 as api
+from app.models.user import User
 
 
 @api.route('/users')
