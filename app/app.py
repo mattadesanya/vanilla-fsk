@@ -3,6 +3,7 @@
 from flask import Flask
 from app.database import db
 from app.controllers.api import api_v1 as api_v1_blueprint
+from app.controllers.auth_controller import auth
 from config import config
 
 
@@ -14,6 +15,7 @@ def create_app(config_name):
     """
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+    app.register_blueprint(auth)
     app.register_blueprint(api_v1_blueprint)
     db.init_app(app)
 

@@ -1,4 +1,4 @@
-from app.util.db import DbUtil as db
+from app.util.db_util import DbUtil as db
 from app.models.user import User
 from faker import Faker
 
