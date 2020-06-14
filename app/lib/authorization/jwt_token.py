@@ -67,6 +67,7 @@ class JwtToken:
             # the token is expired, return an error
             raise TokenException("Expired Token.\
             Login to generate a new token")
-        except jwt.InvalidTokenError:
+        except jwt.InvalidTokenError as err:
             # return error when the token is invalid
+            logging.error(err)
             raise TokenException("Invalid Token. Register User or Login")

@@ -54,6 +54,7 @@ def update_last_login(username):
     user = User.query.filter_by(username=username).first()
     user.last_login = datetime.now()
     db.session.commit()
+# pylint: disable=no-member
 
 
 class Auth:
