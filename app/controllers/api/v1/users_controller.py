@@ -2,21 +2,21 @@
 
 from flask import jsonify, request
 from marshmallow import ValidationError
-from app.lib.user_lib import UserLib as user_lib
+from flask_jwt_extended import jwt_required, fresh_jwt_required
 from app.controllers.api import api_v1 as api
 from app.models.user import User
 from app.serializers.api.v1.user_serializer import users_serializer, \
                                                     user_serializer
 from app.util.db_util import DbUtil as db
-from app.lib.authorization.auth_decorator import token_required
 
 
 @api.route('/users', methods=['POST'])
+@fresh_jwt_required
 def create_user():
     """ Create a new user """
     json_data = request.get_json()
     if not json_data:
-        return jsonify({'message': 'no valid input'}), 400
+        return jsonify({'msg': 'no valid input'}), 400
 
     # validate and deserialize the input
     try:
@@ -24,15 +24,16 @@ def create_user():
     except ValidationError as err:
         return jsonify(err.messages), 422
 
-    user = user_lib.create_user(new_user)
+    user = User(username=new_user['username'], password=new_user['password'])
+    db.save_to_db(user)
     result = user_serializer.dump(user)
-    return jsonify({'message': 'User Created', 'data': result}), 201
+    return jsonify({'msg': 'User Created', 'data': result}), 201
 
 
 @api.route('/users')
-@token_required
+@jwt_required
 def get_users():
-    """Calls api/v1/users
+    """Calls /v1/users
 
     This controller returns all users
     """
@@ -42,19 +43,12 @@ def get_users():
 
 
 @api.route('/users/<fancy_id>')
-@token_required
+@jwt_required
 def get_user(fancy_id):
-    """Calls api/v1/users/id
+    """Calls /v1/users/id
 
     This controller returns a particular used by id
     """
     user = db.get_by_fid(User, fancy_id)
     result = user_serializer.dump(user)
     return jsonify({'data': result})
-
-
-# @api.route('/users/<f_id>', methods=['PUT'])
-# def update_user():
-#     json_data = request.get_json()
-#     if not json_data:
-#         return jsonify({'message': 'no valid input'}), 400
