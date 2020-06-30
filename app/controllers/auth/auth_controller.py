@@ -93,7 +93,8 @@ def refresh():
     """
     current_user = get_jwt_identity()
     resp = {
-        'access_token': create_access_token(identity=current_user)
+        'access_token': create_access_token(identity=current_user),
+        'msg': 'Token refresh successful'
     }
     return jsonify(resp), 200
 
