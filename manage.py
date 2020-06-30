@@ -5,7 +5,8 @@ from flask_migrate import Migrate, MigrateCommand
 from app import flask_app
 from app.database import db
 from db.seeds.user import seed_user
-
+from db.seeds.role_permission import seed_role, seed_permission,\
+                                        map_role_to_permission
 
 migrate = Migrate(flask_app, db)
 manager = Manager(flask_app)
@@ -26,6 +27,9 @@ def seed():
     """
     Generate seed/fake data for application database
     """
+    seed_role()
+    seed_permission()
+    map_role_to_permission()
     seed_user()
 
 
