@@ -11,7 +11,7 @@ Permissions = {
     'View_User': 'VIEW_USER'
 }
 
-KEY_PREFIX = "fsk:role"
+REDIS_KEY_PREFIX = "fsk:role"
 
 
 def get_permissions(role):
@@ -32,10 +32,10 @@ def permission_required(given_permission):
             claims = get_jwt_claims()
 
             # construct redis key for the given role
-            redis_role = "{}:{}".format(KEY_PREFIX, claims['role'])
+            redis_key = "{}:{}".format(REDIS_KEY_PREFIX, claims['role'])
 
             # look in redis for the given list of permissions
-            redis_permissions = redis_client.lrange(redis_role, 0, -1)
+            redis_permissions = redis_client.lrange(redis_key, 0, -1)
 
             permissions = [p.decode("utf-8") for p in redis_permissions]
 
@@ -44,7 +44,7 @@ def permission_required(given_permission):
                 permissions = get_permissions(claims['role'])
                 # add permissions to Redis
                 for permission in permissions:
-                    redis_client.lpush(redis_role, permission)
+                    redis_client.lpush(redis_key, permission)
 
             # if the given permission is not in the list of permissions
             # for the role of this user, block this user
