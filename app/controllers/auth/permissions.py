@@ -6,15 +6,16 @@ from app.redis import redis_client
 from app.models.role_permission import RolePermission
 
 Permissions = {
-   'Create_User': 'CREATE_USER',
-   'View_Users': 'VIEW_USERS',
-   'View_User': 'VIEW_USER'
+    'Create_User': 'CREATE_USER',
+    'View_Users': 'VIEW_USERS',
+    'View_User': 'VIEW_USER'
 }
 
-key_prefix = "fsk:role"
+KEY_PREFIX = "fsk:role"
 
 
 def get_permissions(role):
+    """Get permissions for a role from db"""
     permissions = []
     role_permissions = RolePermission.query.filter_by(role=role)
     for role_permission in role_permissions:
@@ -24,13 +25,14 @@ def get_permissions(role):
 
 
 def permission_required(given_permission):
-    def decorator(fn):
-        @wraps(fn)
+    """permission_required decorator"""
+    def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             claims = get_jwt_claims()
 
             # construct redis key for the given role
-            redis_role = "{}:{}".format(key_prefix, claims['role'])
+            redis_role = "{}:{}".format(KEY_PREFIX, claims['role'])
 
             # look in redis for the given list of permissions
             redis_permissions = redis_client.lrange(redis_role, 0, -1)
@@ -51,7 +53,7 @@ def permission_required(given_permission):
                     "msg": "Insufficient Permissions"
                 }, 401
 
-            return fn(*args, **kwargs)
+            return func(*args, **kwargs)
 
         return wrapper
 
