@@ -6,6 +6,7 @@ from app.serializers import serializer
 class UserSerializer(serializer.Schema):
     # fields to expose
     username = fields.String(required=True)
+    role = fields.String(required=True, dump_only=True)
     password = fields.String(required=True, load_only=True)
     # Smart hyperlinking
     # _links = Hyperlinks(
