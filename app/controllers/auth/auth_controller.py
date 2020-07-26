@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token,\
                                 get_jwt_identity, jwt_refresh_token_required,\
-                                get_raw_jwt
+                                get_raw_jwt, get_jwt_claims
 from app.database import db
 from app.models.user import User
 from app.models.blacklist_token import BlacklistToken
@@ -51,7 +51,7 @@ def is_token_blacklisted(refresh_token):
 
 
 @auth.route('/login', methods=['POST'])
-def login_user():
+def login():
     """ Login user """
     payload = request.json
     resp = {}
@@ -62,8 +62,11 @@ def login_user():
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             access_token = create_access_token(identity=user.f_id,
-                                               fresh=True)
-            refresh_token = create_refresh_token(user.f_id)
+                                               fresh=True,
+                                               user_claims=dict(role=user.role)
+                                               )
+            refresh_token = create_refresh_token(
+                user.f_id, user_claims=dict(role=user.role))
 
             if access_token:
                 update_last_login(username)
@@ -92,8 +95,10 @@ def refresh():
     access token
     """
     current_user = get_jwt_identity()
+    claims = get_jwt_claims()
     resp = {
-        'access_token': create_access_token(identity=current_user),
+        'access_token': create_access_token(identity=current_user,
+                                            user_claims=claims),
         'msg': 'Token refresh successful'
     }
     return jsonify(resp), 200
