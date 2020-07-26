@@ -2,6 +2,7 @@
 
 from flask import Flask
 from app.database import db
+from app.redis import redis_client
 from app.controllers.api import api_v1 as api_v1_blueprint
 from app.controllers.auth import auth_blueprint, jwt
 from config import config
@@ -19,5 +20,6 @@ def create_app(config_name):
     app.register_blueprint(api_v1_blueprint)
     db.init_app(app)
     jwt.init_app(app)
+    redis_client.init_app(app)
 
     return app
