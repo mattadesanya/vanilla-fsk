@@ -2,16 +2,19 @@
 
 from flask import jsonify, request
 from marshmallow import ValidationError
-from flask_jwt_extended import jwt_required, fresh_jwt_required
+from flask_jwt_extended import jwt_required, fresh_jwt_required, \
+                                            get_jwt_identity
 from app.controllers.api import api_v1 as api
 from app.models.user import User
 from app.serializers.api.v1.user_serializer import users_serializer, \
                                                     user_serializer
 from app.util.db_util import DbUtil as db
+from app.controllers.auth.permissions import permission_required, Permissions
 
 
 @api.route('/users', methods=['POST'])
 @fresh_jwt_required
+@permission_required(Permissions['Create_User'])
 def create_user():
     """ Create a new user """
     json_data = request.get_json()
@@ -32,6 +35,7 @@ def create_user():
 
 @api.route('/users')
 @jwt_required
+@permission_required(Permissions['View_Users'])
 def get_users():
     """Calls /v1/users
 
@@ -39,6 +43,20 @@ def get_users():
     """
     users = db.get_all(User)
     result = users_serializer.dump(users)
+    return jsonify({'data': result})
+
+
+@api.route('/users/me')
+@jwt_required
+@permission_required(Permissions['View_User'])
+def get_current_user():
+    """Calls /v1/users/me
+
+    This controller returns information about the current logged in user
+    """
+    current_user_fid = get_jwt_identity()
+    user = db.get_by_fid(User, current_user_fid)
+    result = user_serializer.dump(user)
     return jsonify({'data': result})
 
 
