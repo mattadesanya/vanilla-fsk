@@ -4,11 +4,11 @@ import logging
 from datetime import datetime
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token,\
-                                get_jwt_identity, jwt_refresh_token_required,\
-                                get_raw_jwt, get_jwt_claims
+                                get_jwt_identity, jwt_required,\
+                                get_jwt
 from app.database import db
 from app.models.user import User
-from app.models.blacklist_token import BlacklistToken
+from app.models.blocklist_token import BlocklistToken
 from app.controllers.auth import auth_blueprint as auth, jwt
 
 logger = logging.getLogger(__name__)
@@ -21,11 +21,11 @@ class TokenException(Exception):
 
 
 # pylint: disable=no-member
-def blacklist_token(token):
+def blocklist_token(token):
     """ puts a token in the BlacklistToken table """
-    blacklist = BlacklistToken(token=token)
+    blocklist = BlocklistToken(token=token)
     try:
-        db.session.add(blacklist)
+        db.session.add(blocklist)
         db.session.commit()
         return True
     except TokenException as err:
@@ -41,13 +41,13 @@ def update_last_login(username):
 # pylint: disable=no-member
 
 
-@jwt.token_in_blacklist_loader
-def is_token_blacklisted(refresh_token):
+@jwt.token_in_blocklist_loader
+def is_token_blocklisted(refresh_token):
     """this method checks if a refresh token
-    is in the Blacklisted tokens table
+    is in the Blocklisted tokens table
     """
     jti = refresh_token['jti']
-    return BlacklistToken.check_blacklist(jti)
+    return BlocklistToken.check_blacklist(jti)
 
 
 @auth.route('/login', methods=['POST'])
@@ -87,7 +87,7 @@ def login():
 
 
 @auth.route('/refresh', methods=['POST'])
-@jwt_refresh_token_required
+@jwt_required(refresh=True)
 def refresh():
     """Refresh endpoint
     To help generate a non-fresh access token whenever
@@ -95,7 +95,7 @@ def refresh():
     access token
     """
     current_user = get_jwt_identity()
-    claims = get_jwt_claims()
+    claims = get_jwt()
     resp = {
         'access_token': create_access_token(identity=current_user,
                                             user_claims=claims),
@@ -105,16 +105,16 @@ def refresh():
 
 
 @auth.route('/logout', methods=['DELETE'])
-@jwt_refresh_token_required
+@jwt_required(refresh=True)
 def logout():
     """ the logout method
     accepts request as input,
     it makes a call to JwtToken's decode_token method
     and then blacklists the token gotten.
     """
-    refresh_token = get_raw_jwt()
-    blacklisted = blacklist_token(refresh_token['jti'])
-    if blacklisted:
+    refresh_token = get_jwt()
+    blocklisted = blocklist_token(refresh_token['jti'])
+    if blocklisted:
         return jsonify({'msg': 'Logout Successful'}), 200
 
     return jsonify({'msg': 'Logout failed'}), 500

@@ -2,8 +2,7 @@
 
 from flask import jsonify, request
 from marshmallow import ValidationError
-from flask_jwt_extended import jwt_required, fresh_jwt_required, \
-                                            get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.controllers.api import api_v1 as api
 from app.models.user import User
 from app.serializers.api.v1.user_serializer import users_serializer, \
@@ -13,7 +12,7 @@ from app.controllers.auth.permissions import permission_required, Permissions
 
 
 @api.route('/users', methods=['POST'])
-@fresh_jwt_required
+@jwt_required(refresh=True)
 @permission_required(Permissions['Create_User'])
 def create_user():
     """ Create a new user """
@@ -34,7 +33,7 @@ def create_user():
 
 
 @api.route('/users')
-@jwt_required
+@jwt_required()
 @permission_required(Permissions['View_Users'])
 def get_users():
     """Calls /v1/users
@@ -47,7 +46,7 @@ def get_users():
 
 
 @api.route('/users/me')
-@jwt_required
+@jwt_required()
 @permission_required(Permissions['View_User'])
 def get_current_user():
     """Calls /v1/users/me
@@ -61,7 +60,7 @@ def get_current_user():
 
 
 @api.route('/users/<fancy_id>')
-@jwt_required
+@jwt_required()
 def get_user(fancy_id):
     """Calls /v1/users/id
 

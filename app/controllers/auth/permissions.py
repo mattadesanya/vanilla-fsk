@@ -1,7 +1,7 @@
 """Permission Required Decorator"""
 
 from functools import wraps
-from flask_jwt_extended import get_jwt_claims
+from flask_jwt_extended import get_jwt
 from app.redis import redis_client
 from app.models.role_permission import RolePermission
 
@@ -29,7 +29,7 @@ def permission_required(given_permission):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            claims = get_jwt_claims()
+            claims = get_jwt()
 
             # construct redis key for the given role
             redis_key = "{}:{}".format(REDIS_KEY_PREFIX, claims['role'])
