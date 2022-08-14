@@ -1,19 +1,16 @@
 """The application launch script"""
 
-from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
+from flask.cli import FlaskGroup
 from app import flask_app
 from app.database import db
 from db.seeds.user import seed_user
 from db.seeds.role_permission import seed_role, seed_permission,\
                                         map_role_to_permission
 
-migrate = Migrate(flask_app, db)
-manager = Manager(flask_app)
-manager.add_command('db', MigrateCommand)
+cli = FlaskGroup(flask_app)
 
 
-@manager.command
+@cli.command("reset_tables")
 def reset_tables():
     """
     Drop and re-create all tables
@@ -22,7 +19,7 @@ def reset_tables():
     db.create_all()
 
 
-@manager.command
+@cli.command("seed")
 def seed():
     """
     Generate seed/fake data for application database
@@ -34,4 +31,4 @@ def seed():
 
 
 if __name__ == '__main__':
-    manager.run()
+    cli()

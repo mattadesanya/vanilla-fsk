@@ -3,7 +3,7 @@ init:
 	pip install -r requirements.txt
 
 run:
-	python3 manage.py runserver
+	python manage.py run
 
 lint:
 	flake8 ./*.py app tests
@@ -19,13 +19,13 @@ reset_tables:
 	python manage.py reset_tables
 
 init_db:
-	python manage.py db init --directory db/migrations
+	flask db init --directory db/migrations
 
 migrate:
-	python manage.py db migrate -d db/migrations
+	flask db migrate -d db/migrations
 
 upgrade:
-	python manage.py db upgrade -d db/migrations
+	flask db upgrade -d db/migrations
 
 downgrade:
 	python manage.py db downgrade -d db/migrations
