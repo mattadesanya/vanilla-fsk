@@ -1,30 +1,30 @@
 # pylint: disable=no-member
 # pylint: disable=too-few-public-methods
 
-"""Blacklist Model"""
+"""Blocklist Model"""
 
 from datetime import datetime
 from app.database import db
 
 
-class BlacklistToken(db.Model):
+class BlocklistToken(db.Model):
     """
     Token Model for storing JWT tokens
     """
-    __tablename__ = 'blacklist_tokens'
+    __tablename__ = 'blocklist_tokens'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     token = db.Column(db.String(500), unique=True, nullable=False)
-    blacklisted_on = db.Column(db.DateTime, nullable=False)
+    blocklisted_on = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, token):
         self.token = token
-        self.blacklisted_on = datetime.now()
+        self.blocklisted_on = datetime.now()
 
     @staticmethod
-    def check_blacklist(auth_token):
+    def check_blocklist(auth_token):
         """ check whether auth token has been blacklisted """
-        result = BlacklistToken.query.filter_by(token=str(auth_token)).first()
+        result = BlocklistToken.query.filter_by(token=str(auth_token)).first()
 
         return result
 

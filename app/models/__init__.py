@@ -5,7 +5,7 @@ The line:
 import app.models in app/__init__.py uses this file
 """
 
-import app.models.blacklist_token  # noqa: F401
+import app.models.blocklist_token  # noqa: F401
 import app.models.client_api_key  # noqa: F401
 import app.models.permission  # noqa: F401
 import app.models.role_permission  # noqa: F401
