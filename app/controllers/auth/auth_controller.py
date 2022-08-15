@@ -42,12 +42,12 @@ def update_last_login(username):
 
 
 @jwt.token_in_blocklist_loader
-def is_token_blocklisted(refresh_token):
+def is_token_blocklisted(jwt_header, refresh_token):
     """this method checks if a refresh token
     is in the Blocklisted tokens table
     """
     jti = refresh_token['jti']
-    return BlocklistToken.check_blacklist(jti)
+    return BlocklistToken.check_blocklist(jti)
 
 
 @auth.route('/login', methods=['POST'])
@@ -63,10 +63,10 @@ def login():
         if user and user.check_password(password):
             access_token = create_access_token(identity=user.f_id,
                                                fresh=True,
-                                               user_claims=dict(role=user.role)
+                                               additional_claims=dict(role=user.role)
                                                )
             refresh_token = create_refresh_token(
-                user.f_id, user_claims=dict(role=user.role))
+                user.f_id, additional_claims=dict(role=user.role))
 
             if access_token:
                 update_last_login(username)
@@ -98,7 +98,7 @@ def refresh():
     claims = get_jwt()
     resp = {
         'access_token': create_access_token(identity=current_user,
-                                            user_claims=claims),
+                                            additional_claims=claims),
         'msg': 'Token refresh successful'
     }
     return jsonify(resp), 200

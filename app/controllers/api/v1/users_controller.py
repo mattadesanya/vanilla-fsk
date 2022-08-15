@@ -47,7 +47,7 @@ def get_users():
 
 @api.route('/users/me')
 @jwt_required()
-@permission_required(Permissions['View_User'])
+@permission_required(Permissions['View_Users'])
 def get_current_user():
     """Calls /v1/users/me
 
@@ -60,7 +60,8 @@ def get_current_user():
 
 
 @api.route('/users/<fancy_id>')
-@jwt_required()
+@jwt_required(refresh=True)
+@permission_required(Permissions['View_User'])
 def get_user(fancy_id):
     """Calls /v1/users/id
 
