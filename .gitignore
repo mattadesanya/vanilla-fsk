@@ -1,5 +1,6 @@
 .coverage
 .vscode
+db/migrations/versions/
 cov_html/
 **/__pycache__
 *pyc
