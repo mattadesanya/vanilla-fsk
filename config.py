@@ -54,7 +54,7 @@ class TestConfig(Config):
     REDIS_URL = os.getenv('REDIS_URL') \
         or "redis://localhost:6379/0"
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DB_URL') \
-        or "postgresql://postgres@localhost:5432/fsk_test_db"
+        or "postgresql://postgres@localhost:5432/fsk-test-db"
 
 
 class DevelopmentConfig(Config):
@@ -63,7 +63,7 @@ class DevelopmentConfig(Config):
     REDIS_URL = os.getenv('REDIS_URL') \
         or "redis://localhost:6379/0"
     SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DB_URL') \
-        or "postgresql://postgres@localhost:5432/fsk_dev_db"
+        or "postgresql://postgres@localhost:5432/fsk-dev-db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

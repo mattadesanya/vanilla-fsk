@@ -1,6 +1,6 @@
 #initialize the fsk app
 init:
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 
 run:
 	python manage.py run
@@ -18,7 +18,7 @@ clean:
 reset_tables:
 	python manage.py reset_tables
 
-init_db:
+init-db:
 	flask db init --directory db/migrations
 
 migrate:
@@ -35,7 +35,7 @@ seed: reset_tables
 
 migrate_upgrade: migrate upgrade
 
-db_setup: clean init_db migrate upgrade seed
+db-setup: clean init-db migrate upgrade seed
 
 # run all tests
 # by default uses sugar
@@ -48,7 +48,7 @@ testprint:
 testprint_nosugar:
 	python -m pytest --capture=no -p no:sugar --verbose
 
-test_v:
+test-v:
 	python -m pytest --verbose
 
 testcov:
@@ -62,7 +62,7 @@ nosugar:
 	python -m pytest -p no:sugar
 
 # run all tests without the sugar plugin verbose mode
-nosugar_v:
+nosugar-v:
 	python -m pytest --verbose -p no:sugar
 
 # we can run test directory on a single file or a module with this command
