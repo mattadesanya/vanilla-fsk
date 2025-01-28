@@ -4,7 +4,7 @@ from flask.cli import FlaskGroup
 from app import flask_app
 from app.database import db
 from db.seeds.user import seed_user
-from db.seeds.role_permission import seed_role, seed_permission,\
+from db.seeds.role_permission import seed_role, seed_permission, \
                                         map_role_to_permission
 
 cli = FlaskGroup(flask_app)
